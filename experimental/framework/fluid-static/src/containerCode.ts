@@ -28,10 +28,11 @@ const createRequestHandler: RuntimeRequestHandler = async (
  * These can then be retrieved via container.request("/dataObjectId").
  */
 export const getRuntimeFactory = (factories: any[]) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     const registryEntries = factories.map((i) => i.registryEntry);
     return new BaseContainerRuntimeFactory(
         registryEntries,
         [],
-        [createRequestHandler, innerRequestHandler]
+        [createRequestHandler, innerRequestHandler],
     );
 };
