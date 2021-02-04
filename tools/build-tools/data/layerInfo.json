@@ -247,7 +247,8 @@
             },
             "Server-Tools": {
                 "packages": [
-                    "tinylicious"
+                    "tinylicious",
+                    "fluid-static"
                 ],
                 "deps": [
                     "Server-Libs"
