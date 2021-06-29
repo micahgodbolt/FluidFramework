@@ -51,6 +51,7 @@ export class TinyliciousClient {
         serviceContainerConfig: TinyliciousContainerConfig,
         containerSchema: ContainerSchema,
     ): Promise<TinyliciousResources> {
+        const detached = containerSchema.detached;
         const runtimeFactory = new DOProviderContainerRuntimeFactory(
             containerSchema,
         );
@@ -58,6 +59,7 @@ export class TinyliciousClient {
             serviceContainerConfig,
             runtimeFactory,
             true,
+            detached,
         );
         return this.getFluidContainerAndServices(container);
     }
@@ -99,6 +101,7 @@ export class TinyliciousClient {
         tinyliciousContainerConfig: TinyliciousContainerConfig,
         containerRuntimeFactory: IRuntimeFactory,
         createNew: boolean,
+        detached?: boolean,
     ): Promise<Container> {
         const module = { fluidExport: containerRuntimeFactory };
         const codeLoader = { load: async () => module };
@@ -112,6 +115,8 @@ export class TinyliciousClient {
 
         let container: Container;
 
+
+
         if (createNew) {
             // We're not actually using the code proposal (our code loader always loads the same module
             // regardless of the proposal), but the Container will only give us a NullRuntime if there's
@@ -120,7 +125,9 @@ export class TinyliciousClient {
                 package: "no-dynamic-package",
                 config: {},
             });
-            await container.attach({ url: tinyliciousContainerConfig.id });
+            if (detached !== true) {
+                await container.attach({ url: tinyliciousContainerConfig.id });
+            }
         } else {
             // Request must be appropriate and parseable by resolver.
             container = await loader.resolve({ url: tinyliciousContainerConfig.id });

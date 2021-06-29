@@ -36,6 +36,7 @@ document.title = containerId;
 // when the container is first created.
 export const containerSchema = {
     name: "dice-roller-container",
+    detached: true,
     initialObjects: {
         /* [id]: DataObject */
         map1: SharedMap,
@@ -51,9 +52,14 @@ async function start(): Promise<void> {
     // Get or create the document depending if we are running through the create new flow
 
     const client = useFrs ? FrsClient :  new TinyliciousClient();
-    const clientResources = createNew
-        ? await client.createContainer({ id: containerId, logger: consoleLogger }, containerSchema)
-        : await client.getContainer({ id: containerId, logger: consoleLogger }, containerSchema);
+
+    let clientResources;
+    if (createNew) {
+        clientResources = await client.createContainer({ id: containerId, logger: consoleLogger }, containerSchema);
+        await clientResources.fluidContainer.attach({url: containerId});
+    } else {
+        clientResources = await client.getContainer({ id: containerId, logger: consoleLogger }, containerSchema);
+    }
 
     const { fluidContainer,containerServices } = { fluidContainer: clientResources.fluidContainer,
         containerServices: clientResources.containerServices };
