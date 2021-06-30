@@ -71,11 +71,6 @@ export interface ContainerSchema {
      * included via initialObjects.
      */
     dynamicObjectTypes?: LoadableObjectClass<any>[];
-
-    /**
-     * Should new containers be returned detached. Defaults to false
-     */
-    detached?: boolean;
 }
 
 /**

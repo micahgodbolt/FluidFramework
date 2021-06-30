@@ -37,10 +37,6 @@ export class FluidContainer extends TypedEventEmitter<IFluidContainerEvents> imp
         container.on("disconnected", this.disconnectedHandler);
     }
 
-    public async attach(config) {
-        await this.container.attach(config);
-    }
-
     public get disposed() {
         return this.container.closed;
     }

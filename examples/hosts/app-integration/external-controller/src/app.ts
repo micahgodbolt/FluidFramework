@@ -36,7 +36,6 @@ document.title = containerId;
 // when the container is first created.
 export const containerSchema = {
     name: "dice-roller-container",
-    detached: true,
     initialObjects: {
         /* [id]: DataObject */
         map1: SharedMap,
@@ -51,18 +50,16 @@ async function start(): Promise<void> {
 
     // Get or create the document depending if we are running through the create new flow
 
-    const client = useFrs ? FrsClient :  new TinyliciousClient();
+    const client =  new TinyliciousClient();
 
     let clientResources;
     if (createNew) {
         clientResources = await client.createContainer({ id: containerId, logger: consoleLogger }, containerSchema);
-        await clientResources.fluidContainer.attach({url: containerId});
     } else {
         clientResources = await client.getContainer({ id: containerId, logger: consoleLogger }, containerSchema);
     }
 
-    const { fluidContainer,containerServices } = { fluidContainer: clientResources.fluidContainer,
-        containerServices: clientResources.containerServices };
+    const { fluidContainer, containerServices } = clientResources;
 
     // We now get the DataObject from the container
     const sharedMap1 = fluidContainer.initialObjects.map1 as SharedMap;
@@ -75,7 +72,6 @@ async function start(): Promise<void> {
     const contentDiv = document.getElementById("content") as HTMLDivElement;
     const div1 = document.createElement("div");
     contentDiv.appendChild(div1);
-    renderDiceRoller(diceRollerController, div1);
 
     // We now get the SharedMap from the container
     const sharedMap2 = fluidContainer.initialObjects.map2 as SharedMap;
@@ -86,7 +82,12 @@ async function start(): Promise<void> {
 
     const div2 = document.createElement("div");
     contentDiv.appendChild(div2);
-    // We render a view which uses the controller.
+
+    // If this is a new container, we attach it to the client before rendering.
+    if (createNew) {clientResources.attach();}
+
+    // We render views which uses the controller.
+    renderDiceRoller(diceRollerController, div1);
     renderDiceRoller(diceRollerController2, div2);
 
     // Render the audience information for the members currently in the session
