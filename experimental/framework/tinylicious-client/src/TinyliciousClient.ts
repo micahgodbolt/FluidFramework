@@ -115,8 +115,6 @@ export class TinyliciousClient {
 
         let container: Container;
 
-
-
         if (createNew) {
             // We're not actually using the code proposal (our code loader always loads the same module
             // regardless of the proposal), but the Container will only give us a NullRuntime if there's
