@@ -57,7 +57,7 @@ async function start(): Promise<void> {
 
     if (createNew) {
         clientResources = await client.createContainer(serviceConfig, containerSchema);
-        clientResources.attach();
+        await clientResources.attach();
     } else {
         clientResources = await client.getContainer(serviceConfig, containerSchema);
     }
