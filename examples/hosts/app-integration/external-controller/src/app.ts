@@ -55,9 +55,20 @@ async function start(): Promise<void> {
 
     const preAttach = async (container) => console.log(container.initialObjects);
 
+<<<<<<< HEAD
     const { fluidContainer, containerServices } = createNew
         ? await client.createContainer(serviceConfig, containerSchema, preAttach)
         : await client.getContainer(serviceConfig, containerSchema);
+=======
+    if (createNew) {
+        clientResources = await client.createContainer(serviceConfig, containerSchema);
+        await clientResources.attach();
+    } else {
+        clientResources = await client.getContainer(serviceConfig, containerSchema);
+    }
+
+    const { fluidContainer, containerServices } = clientResources;
+>>>>>>> efc4f7cb6524b5232c9e854a8031d755f3cd161d
 
     // We now get the DataObject from the container
     const sharedMap1 = fluidContainer.initialObjects.map1 as SharedMap;
