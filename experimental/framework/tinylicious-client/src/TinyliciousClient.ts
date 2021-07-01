@@ -26,7 +26,7 @@ import {
     TinyliciousContainerConfig,
     TinyliciousContainerServices,
     TinyliciousResources,
-    TinyliciousDetachedResources,
+    TinyliciousCreateResources,
 } from "./interfaces";
 import { TinyliciousAudience } from "./TinyliciousAudience";
 
@@ -51,7 +51,7 @@ export class TinyliciousClient {
     public async createContainer(
         serviceContainerConfig: TinyliciousContainerConfig,
         containerSchema: ContainerSchema,
-    ): Promise<TinyliciousDetachedResources> {
+    ): Promise<TinyliciousCreateResources> {
         const runtimeFactory = new DOProviderContainerRuntimeFactory(
             containerSchema,
         );

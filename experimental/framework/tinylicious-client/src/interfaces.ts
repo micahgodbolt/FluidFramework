@@ -36,8 +36,8 @@ export interface TinyliciousResources {
     containerServices: TinyliciousContainerServices;
 }
 
-export interface TinyliciousDetachedResources extends TinyliciousResources {
-    attach: () => void;
+export interface TinyliciousCreateResources extends TinyliciousResources {
+    attach: () => Promise<void>;
 }
 
 /**

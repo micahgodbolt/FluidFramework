@@ -50,13 +50,16 @@ async function start(): Promise<void> {
 
     // Get or create the document depending if we are running through the create new flow
 
-    const client =  new TinyliciousClient();
+    const client = useFrs ? FrsClient :  new TinyliciousClient();
+    const serviceConfig = { id: containerId, logger: consoleLogger };
 
     let clientResources;
+
     if (createNew) {
-        clientResources = await client.createContainer({ id: containerId, logger: consoleLogger }, containerSchema);
+        clientResources = await client.createContainer(serviceConfig, containerSchema);
+        clientResources.attach();
     } else {
-        clientResources = await client.getContainer({ id: containerId, logger: consoleLogger }, containerSchema);
+        clientResources = await client.getContainer(serviceConfig, containerSchema);
     }
 
     const { fluidContainer, containerServices } = clientResources;
@@ -82,9 +85,6 @@ async function start(): Promise<void> {
 
     const div2 = document.createElement("div");
     contentDiv.appendChild(div2);
-
-    // If this is a new container, we attach it to the client before rendering.
-    if (createNew) {clientResources.attach();}
 
     // We render views which uses the controller.
     renderDiceRoller(diceRollerController, div1);
