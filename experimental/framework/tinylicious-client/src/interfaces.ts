@@ -36,10 +36,6 @@ export interface TinyliciousResources {
     containerServices: TinyliciousContainerServices;
 }
 
-export interface TinyliciousCreateResources extends TinyliciousResources {
-    attach: () => Promise<void>;
-}
-
 /**
  * Since Tinylicious provides user names for all of its members, we extend the IMember interface to include
  * this service-specific value. It will be returned for all audience members connected to Tinylicious.

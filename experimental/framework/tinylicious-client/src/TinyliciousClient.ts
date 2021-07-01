@@ -26,7 +26,6 @@ import {
     TinyliciousContainerConfig,
     TinyliciousContainerServices,
     TinyliciousResources,
-    TinyliciousCreateResources,
 } from "./interfaces";
 import { TinyliciousAudience } from "./TinyliciousAudience";
 
@@ -51,18 +50,20 @@ export class TinyliciousClient {
     public async createContainer(
         serviceContainerConfig: TinyliciousContainerConfig,
         containerSchema: ContainerSchema,
-    ): Promise<TinyliciousCreateResources> {
+        preAttach?: (container: FluidContainer) => Promise<void>,
+    ): Promise<TinyliciousResources> {
         const runtimeFactory = new DOProviderContainerRuntimeFactory(
             containerSchema,
         );
-        const container = await this.getContainerCore(
+        const detachedContainer = await this.getContainerCore(
             serviceContainerConfig,
             runtimeFactory,
             true,
         );
-        const resources = await this.getFluidResources(container);
-        const attach = async () => container.attach({url: serviceContainerConfig.id});
-        return {...resources, attach};
+        const {fluidContainer, containerServices} = await this.getFluidResources(detachedContainer);
+        if (preAttach) { await preAttach(fluidContainer); }
+        await detachedContainer.attach({ url: serviceContainerConfig.id });
+        return {fluidContainer, containerServices};
     }
 
     public async getContainer(
