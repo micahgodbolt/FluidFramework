@@ -60,8 +60,7 @@ export class TinyliciousClient {
             runtimeFactory,
             true,
         );
-        const rootDataObject = await requestFluidObject<RootDataObject>(container, "/");
-        const resources = this.getFluidResources(container, rootDataObject);
+        const resources = await this.getFluidResources(container);
         const attach = async () => container.attach({url: serviceContainerConfig.id});
         return {...resources, attach};
     }
@@ -78,16 +77,14 @@ export class TinyliciousClient {
             runtimeFactory,
             false,
         );
-        const rootDataObject = await requestFluidObject<RootDataObject>(container, "/");
-        const resources = this.getFluidResources(container, rootDataObject);
-
+        const resources = await this.getFluidResources(container);
         return resources;
     }
 
-    private getFluidResources(
+    private async getFluidResources(
         container: Container,
-        rootDataObject: RootDataObject,
-    ): TinyliciousResources  {
+    ): Promise<TinyliciousResources>  {
+        const rootDataObject = await requestFluidObject<RootDataObject>(container, "/");
         const fluidContainer: FluidContainer = new FluidContainer(container, rootDataObject);
         const containerServices: TinyliciousContainerServices = this.getContainerServices(container);
         const tinyliciousResources: TinyliciousResources = { fluidContainer, containerServices };
