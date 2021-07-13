@@ -61,7 +61,9 @@ export class TinyliciousClient {
             true,
         );
         const {fluidContainer, containerServices} = await this.getFluidResources(detachedContainer);
-        if (preAttach) { await preAttach(fluidContainer); }
+        if (preAttach) {
+            await preAttach(fluidContainer);
+        }
         await detachedContainer.attach({ url: serviceContainerConfig.id });
         return {fluidContainer, containerServices};
     }
