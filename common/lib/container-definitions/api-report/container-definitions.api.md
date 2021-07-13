@@ -194,7 +194,7 @@ export interface IContainerEvents extends IEvent {
     // (undocumented)
     (event: "contextChanged", listener: (codeDetails: IFluidCodeDetails) => void): any;
     // (undocumented)
-    (event: "disconnected" | "attaching" | "attached", listener: () => void): any;
+    (event: "disconnected" | "attached", listener: () => void): any;
     // (undocumented)
     (event: "closed", listener: (error?: ICriticalContainerError) => void): any;
     // (undocumented)
@@ -299,7 +299,6 @@ export interface IErrorBase {
     readonly errorType: string;
     // (undocumented)
     readonly message: string;
-    sequenceNumber?: number;
 }
 
 // @public
@@ -448,7 +447,7 @@ export const IRuntimeFactory: keyof IProvideRuntimeFactory;
 
 // @public
 export interface IRuntimeFactory extends IProvideRuntimeFactory {
-    instantiateRuntime(context: IContainerContext): Promise<IRuntime>;
+    instantiateRuntime(context: IContainerContext, existing?: boolean): Promise<IRuntime>;
 }
 
 // @public
